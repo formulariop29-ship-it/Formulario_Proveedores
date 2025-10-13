@@ -87,7 +87,7 @@ def funcion_x(ruta_pdf, nit_formulario):
             Subnit = lineas[idx_nit][0:18]
             fechavig = datetime.strptime(SubFecha, "%d-%m-%Y").date()
             hoy = date.today()
-            if (hoy - fechavig).days > 1000: raise ValueError("La fecha del RUT no está vigente.")
+            if (hoy - fechavig).days > 30: raise ValueError("La fecha del RUT no está vigente.")
             nit_num = int(Subnit.replace(" ", ""))
             if nit_num != nit_formulario: raise ValueError(f"NIT formulario ({nit_formulario}) ≠ NIT PDF ({nit_num}).")
             return nit_num, fechavig
@@ -150,7 +150,7 @@ def funcion_certificacion_davivienda(ruta_pdf):
             dia, mes, anio = int(encontrado.group(1)), int(encontrado.group(2)), int(encontrado.group(3))
             fechavig = date(anio, mes, dia)
             hoy = date.today()
-            if (hoy - fechavig).days > 90: raise ValueError("La certificación Davivienda no está vigente.")
+            if (hoy - fechavig).days > 30: raise ValueError("La certificación Davivienda no está vigente.")
             return fechavig, (hoy - fechavig).days, fecha_texto
     except Exception as e:
         raise e
@@ -174,7 +174,7 @@ def funcion_certificacion_bogota(ruta_pdf):
             fechavig = date(anio, mes, dia)
             hoy = date.today()
             dias_diferencia = (hoy - fechavig).days
-            if dias_diferencia > 90: raise ValueError("La certificación Banco de Bogotá no está vigente.")
+            if dias_diferencia > 30: raise ValueError("La certificación Banco de Bogotá no está vigente.")
             return fechavig, dias_diferencia, linea8
     except Exception as e:
         raise e
@@ -201,7 +201,7 @@ def funcion_certificacion_colpatria(ruta_pdf):
             fechavig = date(anio, mes, dia)
             hoy = date.today()
             dias_diferencia = (hoy - fechavig).days
-            if dias_diferencia > 900: raise ValueError("La certificación bancaria de Colpatria no está vigente.")
+            if dias_diferencia > 30: raise ValueError("La certificación bancaria de Colpatria no está vigente.")
             return fechavig, dias_diferencia, linea6
     except Exception as e:
         raise e
@@ -228,7 +228,7 @@ def funcion_certificacion_occidente(ruta_pdf):
             fechavig = date(anio, mes, dia)
             hoy = date.today()
             dias_diferencia = (hoy - fechavig).days
-            if dias_diferencia > 90: raise ValueError("La certificación bancaria de Occidente no está vigente.")
+            if dias_diferencia > 30: raise ValueError("La certificación bancaria de Occidente no está vigente.")
             return fechavig, dias_diferencia, linea8
     except Exception as e:
         raise e
@@ -244,11 +244,9 @@ def guardar_respuestas(datos):
     st.json(datos)
 
 # Guardar PDFs temporales
-# Guardar PDFs temporales
 def guardar_pdfs_temporales():
     rutas = {}
 
-    # ACCESO SEGURO A LA VARIABLE 'Nit'
     nit = st.session_state.get("form_data", {}).get("Nit", "Sin NIT")
 
     carpeta_nit = os.path.join("temp", str(nit))
@@ -302,8 +300,7 @@ def enviar_y_ejecutar():
     rutas_pdf = guardar_pdfs_temporales()
 
     try:
-        # Acceder al primer elemento de la lista para pasar la ruta del archivo
-        # Se usa .get() para evitar errores si la clave no existe
+        
         funcion_x(rutas_pdf.get("RUT (PDF)")[0], nit_formulario)
         funcion_camara_comercio(rutas_pdf.get("Cámara De Comercio (PDF)")[0])
         banco = st.session_state.get("Banco")
