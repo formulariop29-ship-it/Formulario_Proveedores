@@ -3,6 +3,8 @@
 
 # In[ ]:
 
+# 1.Importaciones y Configuración Inicial
+
 # Importación de librerías
 import streamlit as st
 import pandas as pd
@@ -18,10 +20,7 @@ import webbrowser
 st.set_page_config(page_title="Formulario Python", layout="wide") # Configura el título de la pestaña del navegador y el diseño de la página 
 
 # Archivo donde se guardarán las respuestas
-archivo_excel = "respuestasforms.xlsx"
-
-# Ruta donde está instalado tesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Tesseract-OCR\tesseract.exe"
+# archivo_excel = "respuestasforms.xlsx"
 
 # Diccionario de meses en español
 meses = {
@@ -66,6 +65,8 @@ if "Banco" not in st.session_state:
     st.session_state["Banco"] = ""
 if "Tipo de proveedor" not in st.session_state:
     st.session_state["Tipo de proveedor"] = ""
+
+# 2. Funciones de Validación de Documentos
 
 # FUNCIONES DE VALIDACIÓN 
 def funcion_x(ruta_pdf, nit_formulario):
@@ -234,6 +235,8 @@ def funcion_certificacion_occidente(ruta_pdf):
     except Exception as e:
         raise e
 
+# 3.Funciones de Manejo de Datos y Envío
+
 # Guardar respuestas
 def guardar_respuestas(datos):
     df = pd.DataFrame([datos])
@@ -346,11 +349,12 @@ def enviar_y_ejecutar():
     guardar_respuestas(datos_para_guardar)
     st.success("Formulario enviado y archivos guardados correctamente.")
 
+# 4. INTERFAZ DE USUARIO
+
 def crear_campo_pdf(label, tipo_proveedor, multiple=False):
     key = f"{tipo_proveedor}_{label}".replace(" ", "_").replace("/", "_").replace("ñ", "n")
     return st.file_uploader(label, type=["pdf"], key=key, accept_multiple_files=multiple)
 
-# INTERFAZ DE USUARIO
 
 st.title("Formulario de Proveedores")
 
