@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-
+# Importación de librerías
 import streamlit as st
 import pandas as pd
 import os
@@ -14,7 +14,8 @@ import pytesseract
 from PIL import Image
 import webbrowser
 
-st.set_page_config(page_title="Formulario Python", layout="wide")
+# Configuración de Streamlit
+st.set_page_config(page_title="Formulario Python", layout="wide") # Configura el título de la pestaña del navegador y el diseño de la página 
 
 # Archivo donde se guardarán las respuestas
 archivo_excel = "respuestasforms.xlsx"
