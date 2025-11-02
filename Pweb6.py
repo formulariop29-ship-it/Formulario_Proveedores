@@ -242,7 +242,7 @@ def funcion_certificacion_occidente(ruta_pdf):
 
 # 3.Funciones de Manejo de Datos y Envío
 
-# Guardar respuestas
+# 3.1 Guardar respuestas
 def guardar_respuestas(datos):
     df = pd.DataFrame([datos])
     if os.path.exists(archivo_excel):
@@ -252,7 +252,7 @@ def guardar_respuestas(datos):
     st.success("¡Respuestas guardadas con éxito!")
     st.json(datos)
 
-# Guardar PDFs temporales
+# 3.2 Guardar PDFs temporales
 def guardar_pdfs_temporales():
     rutas = {}
 
@@ -286,6 +286,7 @@ def guardar_pdfs_temporales():
 
     return rutas
 
+# 3.3 Función enviar_y_ejecutar()
 def enviar_y_ejecutar():
     try:
         nit_formulario = int(st.session_state.get("Nit"))
