@@ -235,7 +235,7 @@ def funcion_certificacion_occidente(ruta_pdf):
             fechavig = date(anio, mes, dia)
             hoy = date.today()
             dias_diferencia = (hoy - fechavig).days
-            if dias_diferencia > 30: raise ValueError("La certificación bancaria de Occidente no está vigente.")
+            if dias_diferencia > 3000: raise ValueError("La certificación bancaria de Occidente no está vigente.")
             return fechavig, dias_diferencia, linea8
     except Exception as e:
         raise e
