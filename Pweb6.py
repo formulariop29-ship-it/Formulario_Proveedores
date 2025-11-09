@@ -91,7 +91,7 @@ def funcion_x(ruta_pdf, nit_formulario):
             Subnit = lineas[idx_nit][0:18]
             fechavig = datetime.strptime(SubFecha, "%d-%m-%Y").date()
             hoy = date.today()
-            if (hoy - fechavig).days > 3000: raise ValueError("La fecha del RUT no está vigente.")
+            if (hoy - fechavig).days > 30: raise ValueError("La fecha del RUT no está vigente.")
             nit_num = int(Subnit.replace(" ", ""))
             if nit_num != nit_formulario: raise ValueError(f"NIT formulario ({nit_formulario}) ≠ NIT PDF ({nit_num}).")
             return nit_num, fechavig
@@ -122,7 +122,7 @@ def funcion_camara_comercio(ruta_pdf):
             mes = meses.get(mes_texto)
             if not mes: raise ValueError(f"Mes no reconocido: {mes_texto}")
             fechavig = date(anio, mes, dia)
-            if (date.today() - fechavig).days > 3000: raise ValueError("La fecha de Cámara Comercio no está vigente.")
+            if (date.today() - fechavig).days > 30: raise ValueError("La fecha de Cámara Comercio no está vigente.")
             return fechavig
     except Exception as e:
         raise e
@@ -235,7 +235,7 @@ def funcion_certificacion_occidente(ruta_pdf):
             fechavig = date(anio, mes, dia)
             hoy = date.today()
             dias_diferencia = (hoy - fechavig).days
-            if dias_diferencia > 3000: raise ValueError("La certificación bancaria de Occidente no está vigente.")
+            if dias_diferencia > 30: raise ValueError("La certificación bancaria de Occidente no está vigente.")
             return fechavig, dias_diferencia, linea8
     except Exception as e:
         raise e
