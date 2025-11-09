@@ -3,9 +3,9 @@
 
 # In[ ]:
 
-# 1.Importaciones y Configuración Inicial
+# 2.Importaciones y Configuración Inicial
 
-# 1.1 Importación de librerías
+# 2.1 Importación de librerías
 import streamlit as st
 import pandas as pd
 import os
@@ -16,20 +16,20 @@ import pytesseract
 from PIL import Image
 import webbrowser
 
-# 1.2 Configuración de Streamlit
+# 3. Configuración de la página
 st.set_page_config(page_title="Formulario Python", layout="wide") # Configura el título de la pestaña del navegador y el diseño de la página 
 
 # Archivo donde se guardarán las respuestas
 archivo_excel = "respuestasforms.xlsx"
 
-## 1.3 Diccionario de meses en español
+## 3.1 Variables Globales: Diccionario de meses en español
 meses = {
     "enero": 1, "febrero": 2, "marzo": 3, "abril": 4,
     "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
     "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
 }
 
-# 1.4 Inicializar session_state
+# 3.2 Inicializar session_state
 st.session_state.pdfs = {}
 if "form_data" not in st.session_state:
     st.session_state.form_data = {
@@ -48,7 +48,7 @@ if "form_data" not in st.session_state:
         "Tipo de proveedor": ""
     }
 
-# 1.5 Definir la lista de campos de texto
+# 3.3 Definición de los campos del formulario
 campos_texto_form = [
     "Nit", "Razón Social", "Ubicación", "Teléfono Celular",
     "Teléfono Fijo", "Nombre del Asesor Comercial", "Correo Electrónico",
@@ -56,7 +56,7 @@ campos_texto_form = [
     "Fecha de Apertura de Crédito"
 ]
 
-# 1.6 Inicializar los estados de sesión para cada campo de texto si no existen
+#  3.4.	Inicialización de campos adicionales: Inicializar los estados de sesión para cada campo de texto si no existen
 for campo in campos_texto_form:
     if campo not in st.session_state:
         st.session_state[campo] = ""
@@ -66,11 +66,11 @@ if "Banco" not in st.session_state:
 if "Tipo de proveedor" not in st.session_state:
     st.session_state["Tipo de proveedor"] = ""
 
-# 2. Funciones de Validación de Documentos
+# 4. Funciones de Validación de Documentos
 
 # FUNCIONES DE VALIDACIÓN 
 
-# 2.2 Funcion X
+# 4.2 Función X
 def funcion_x(ruta_pdf, nit_formulario):
     try:
         with pdfplumber.open(ruta_pdf) as pdf:
@@ -98,7 +98,7 @@ def funcion_x(ruta_pdf, nit_formulario):
     except Exception as e:
         raise e
         
-# 2.3 Funcion Camara Comercio
+# 4.3 Función Camara Comercio
 def funcion_camara_comercio(ruta_pdf):
     try:
         with pdfplumber.open(ruta_pdf) as pdf:
@@ -127,7 +127,7 @@ def funcion_camara_comercio(ruta_pdf):
     except Exception as e:
         raise e
         
-# 2.4 Funciones Certificaciones Bancarias 
+# 4.4 Funciones Certificaciones Bancarias 
 
 def funcion_certificacion_bancolombia(ruta_pdf):
     try:
@@ -240,9 +240,9 @@ def funcion_certificacion_occidente(ruta_pdf):
     except Exception as e:
         raise e
 
-# 3.Funciones de Manejo de Datos y Envío
+# 5. Funciones de Manejo de Datos y Envío
 
-# 3.1 Guardar respuestas
+# 5.1 Función guardar_respuesta
 def guardar_respuestas(datos):
     df = pd.DataFrame([datos])
     if os.path.exists(archivo_excel):
@@ -252,7 +252,7 @@ def guardar_respuestas(datos):
     st.success("¡Respuestas guardadas con éxito!")
     st.json(datos)
 
-# 3.2 Guardar PDFs temporales
+# 5.2 Función guardar_pdfs_temporales
 def guardar_pdfs_temporales():
     rutas = {}
 
@@ -286,7 +286,7 @@ def guardar_pdfs_temporales():
 
     return rutas
 
-# 3.3 Función enviar_y_ejecutar()
+# 5.3 Función enviar_y_ejecutar()
 def enviar_y_ejecutar():
     try:
         nit_formulario = int(st.session_state.get("Nit"))
@@ -355,14 +355,14 @@ def enviar_y_ejecutar():
     guardar_respuestas(datos_para_guardar)
     st.success("Formulario enviado y archivos guardados correctamente.")
 
-# 4. INTERFAZ DE USUARIO
+# 6. INTERFAZ DE USUARIO
 
-#4.1 Función crear_campo_pdf
+#6.1 Función crear_campo_pdf
 def crear_campo_pdf(label, tipo_proveedor, multiple=False):
     key = f"{tipo_proveedor}_{label}".replace(" ", "_").replace("/", "_").replace("ñ", "n")
     return st.file_uploader(label, type=["pdf"], key=key, accept_multiple_files=multiple)
 
-# 4.2 Título del formulario e ingreso de datos básicos
+# 6.2 Título del formulario e ingreso de datos básicos
 
 st.title("Formulario de Proveedores")
 
@@ -374,7 +374,7 @@ st.session_state.pdfs["Cédula del Representante (PDF)"] = st.file_uploader(
     "Subir cédula representante (PDF)", type="pdf", key="cedula_representante"
 )
 
-#  Subida de PDFs obligatorios
+# 6.3  Subida de PDFs obligatorios
 st.markdown("RUT")
 st.markdown("El RUT debe estar actualizado, con una fecha de generación no mayor a 30 días y reflejar la información vigente del contribuyente.")
 st.session_state.pdfs["RUT (PDF)"] = st.file_uploader(
@@ -386,7 +386,7 @@ st.session_state.pdfs["Cámara De Comercio (PDF)"] = st.file_uploader(
     "Subir Cámara de Comercio (PDF)", type="pdf", key="camara_comercio"
 )
 
-# 4.4 SELECCIÓN DE BANCO
+# 6.4 SELECCIÓN DE BANCO
 st.selectbox(
     "Seleccione el banco",
     ["", "Bancolombia", "Davivienda", "Banco de Bogotá", "Colpatria", "Banco de Occidente"],
@@ -398,7 +398,7 @@ st.session_state.pdfs["Certificación Bancaria (PDF)"] = st.file_uploader(
     "Subir Certificación Bancaria (PDF)", type="pdf", key="cert_bancaria"
 )
 
-# 4.5 TIPO DE PROVEEDOR 
+# 6.5 Selección del TIPO DE PROVEEDOR 
 opciones_tipo = [
     "Persona natural servicios administrativos",
     "Persona natural servicios operativos (mantenimiento técnicos y locativos)",
@@ -432,7 +432,7 @@ opciones_tipo = [
 seleccion = st.selectbox("Seleccione el tipo de proveedor", opciones_tipo)
 st.session_state["Tipo de proveedor"] = seleccion
 
-# 4.6 CAMPOS ADICIONALES POR TIPO DE PROVEEDOR 
+# 6.6 CAMPOS ADICIONALES POR TIPO DE PROVEEDOR 
 if seleccion == "Persona natural servicios administrativos":
     st.session_state.pdfs[f"Seguridad Social ({seleccion})"] = crear_campo_pdf("Seguridad Social", seleccion)
     st.session_state.pdfs[f"Inducción SST ({seleccion})"] = crear_campo_pdf("Inducción SST", seleccion)
@@ -641,7 +641,7 @@ elif seleccion == "Licencias Tecnológicas":
     st.session_state.pdfs[f"Buenas Prácticas Ambientales o Certificado ISO 14001 ({seleccion})"] = crear_campo_pdf("Buenas Prácticas Ambientales o Certificado ISO 14001", seleccion)
     st.session_state.pdfs[f"Certificados De Experiencia ({seleccion})"] = crear_campo_pdf("Certificados De Experiencia", seleccion)
 
-# 4.7 Agregar la información y el enlace debajo del campo de carga
+# 6.7 6.7.	Formato Único de Creación de Proveedores: Agregar la información y el enlace debajo del campo de carga
 st.markdown("Formato Único de Creación de Proveedores")
 st.markdown("Diligenciar el siguiente formato: https://drive.google.com/file/d/1lSqtmdmTbRrOc3mGKCEJ5eISLasj4VwB/view?usp=drive_link")
 
@@ -649,7 +649,7 @@ st.session_state.pdfs["Formato Único de Creación de Proveedores (PDF)"] = st.f
     "Subir Formato Único de Creación de Proveedores (PDF)", type="pdf", key="formato_proveedores"
 )
 
-# 4.8  BOTÓN ENVIAR
+# 6.8  BOTÓN ENVIAR
 if st.button("Enviar Formulario"):
     enviar_y_ejecutar()
 
