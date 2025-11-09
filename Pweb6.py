@@ -122,7 +122,7 @@ def funcion_camara_comercio(ruta_pdf):
             mes = meses.get(mes_texto)
             if not mes: raise ValueError(f"Mes no reconocido: {mes_texto}")
             fechavig = date(anio, mes, dia)
-            if (date.today() - fechavig).days > 30: raise ValueError("La fecha de Cámara Comercio no está vigente.")
+            if (date.today() - fechavig).days > 3000: raise ValueError("La fecha de Cámara Comercio no está vigente.")
             return fechavig
     except Exception as e:
         raise e
