@@ -91,7 +91,7 @@ def funcion_x(ruta_pdf, nit_formulario):
             Subnit = lineas[idx_nit][0:18]
             fechavig = datetime.strptime(SubFecha, "%d-%m-%Y").date()
             hoy = date.today()
-            if (hoy - fechavig).days > 30: raise ValueError("La fecha del RUT no está vigente.")
+            if (hoy - fechavig).days > 3000: raise ValueError("La fecha del RUT no está vigente.")
             nit_num = int(Subnit.replace(" ", ""))
             if nit_num != nit_formulario: raise ValueError(f"NIT formulario ({nit_formulario}) ≠ NIT PDF ({nit_num}).")
             return nit_num, fechavig
