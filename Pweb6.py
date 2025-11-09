@@ -20,7 +20,7 @@ import webbrowser
 st.set_page_config(page_title="Formulario Python", layout="wide") # Configura el título de la pestaña del navegador y el diseño de la página 
 
 # Archivo donde se guardarán las respuestas
- archivo_excel = "respuestasforms.xlsx"
+archivo_excel = "respuestasforms.xlsx"
 
 ## 1.3 Diccionario de meses en español
 meses = {
